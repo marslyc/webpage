@@ -61,7 +61,7 @@ let textureLoader = new THREE.TextureLoader()
 
 // 精灵图
 let spriteMaterial;
-let spriteSrc1 = new URL('@/images/textures/city/door.png', import.meta.url).href
+let spriteSrc1 = new URL('@/images/textures/city/alarm.png', import.meta.url).href
 let texture = textureLoader.load(spriteSrc1)
 let spriteMaterial1 = new THREE.SpriteMaterial({
   map:texture
