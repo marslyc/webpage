@@ -16,7 +16,21 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import LeftMenu from '@/views/LeftMenu.vue';
+// import Stats from 'three/examples/jsm/libs/stats.module.js';    
+// let stats = new Stats();
+// stats.domElement.style.position = 'absolute';
+// stats.domElement.style.top = '0px';
+// const animate = () => {
+//   stats.update();
+//   requestAnimationFrame(animate);
+// }
+// onMounted(() => {
+//   animate()
+// })
+
+// document.body.appendChild(stats.dom);
 </script>
 <style>
 

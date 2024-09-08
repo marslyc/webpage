@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import scene from "../scene";
-// import { DRACOLoader } from "three/examples/jsm/Addons.js";
+
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import modifyCityMaterial from "../modify/modifyCityMaterial";
 import MeshLine from "./MeshLine";

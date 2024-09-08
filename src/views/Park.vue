@@ -12,7 +12,6 @@ import { onMounted, reactive, ref } from 'vue';
 
 // import { getSmartCityInfo, getSmartCityList } from '@/api/api.js'
 
-let dataInfo = ref([]);
 
 let eventList = ref([])
 
@@ -39,12 +38,6 @@ let eventList = ref([])
 
 
 onMounted(() => {
-    // changeInfo()
-    // changeList()
-    // setInterval(()=> {
-    //     changeInfo()
-    //     changeList()
-    // }, 50000)
 })
 
 </script>

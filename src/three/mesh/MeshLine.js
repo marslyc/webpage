@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { ThreeMFLoader } from "three/examples/jsm/Addons.js";
 export default class MeshLine {
     constructor(geometry) {
         let edges = new THREE.EdgesGeometry(geometry)

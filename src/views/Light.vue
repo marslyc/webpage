@@ -1,7 +1,7 @@
 
 
 <template>
-    <div id='box1' ref="light"></div>
+    <div id='box1' class="light" ref="light"></div>
   </template>
   
   <script setup>
@@ -13,14 +13,14 @@
   // 导入动画库
   import gsap from "gsap";
   
-  import * as CANNON from 'cannon-es'
+
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
   
   import basicVertaxShader from '@/components/shader/flylight/vertex.glsl'
   import basicFragmentShader from '@/components/shader/flylight/fragment.glsl'
   // const gui = new GUI()
-  import { ref ,onMounted } from 'vue'
+  import { ref , onMounted, onBeforeUnmount } from 'vue'
 
   let light = ref()
   // 1、创建场景
@@ -67,8 +67,7 @@
   let gltfSrc = new URL('@/images/model/flyLight.glb',import.meta.url).href
   let gltfLoader = new GLTFLoader()
   gltfLoader.load(gltfSrc,(gltf)=> {
-    // console.log(gltf)
-    // scene.add(gltf.scene)
+
     lightBox = gltf.scene.children[0];
     lightBox.material = shaderMaterial
   
@@ -170,11 +169,7 @@
   
   render();
   
-  
-  
-  // 监听画面变化，更新渲染画面
-  window.addEventListener("resize", () => {
-
+ let resize = () => {
     // 更新摄像头
     camera.aspect = window.innerWidth / window.innerHeight;
     //   更新摄像机的投影矩阵
@@ -184,18 +179,23 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     //   设置渲染器的像素比
     renderer.setPixelRatio(window.devicePixelRatio);
-  });
+ }
   
+  // 监听画面变化，更新渲染画面
+  window.addEventListener("resize", resize);
   
+  onBeforeUnmount(()=> {
+    window.removeEventListener("resize", resize);
+  })
   </script>
   
-  <style>
+  <style scoped>
   
   * {
     margin: 0;
     padding: 0;
   }
-  body {
+  .light {
     background-color: rgb(36, 58, 66);
   }
 

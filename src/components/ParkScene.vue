@@ -29,13 +29,6 @@ import animate from "@/three/animatePark";
 import { onMounted, ref, watch } from "vue";
 import eventHub from '@/utils/eventHub'
 
-const props = defineProps({
-  // 控制器
-  eventList: {
-    type: Array,
-    default: () => {},
-  },
-});
 
 let sceneDiv = ref(null);
 scene.add(cameraModule.activeCamera);

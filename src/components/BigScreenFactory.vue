@@ -81,6 +81,14 @@
 
           <div class="footerBorder"></div>
         </div>
+        <div class="cityEvent" @click="pointsRemove">
+          <h3>
+            <img class="icon" :src="imgSrc" alt="" />
+            <span> 移除粒子 </span>
+          </h3>
+
+          <div class="footerBorder"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -120,6 +128,9 @@ const pointsBlast = () => {
 
 const pointsBack = () => {
   eventHub.emit("pointsBack");
+};
+const pointsRemove = () => {
+  eventHub.emit("pointsRemove");
 };
 </script>
 <style scoped>

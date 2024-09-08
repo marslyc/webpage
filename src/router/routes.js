@@ -1,3 +1,5 @@
+import { path } from 'd3'
+
 const cityComponent = ()=> import('../views/City.vue')
 const parkComponent = ()=> import('../views/Park.vue')
 const factoryComponent = ()=> import('../views/Factory.vue')
@@ -18,14 +20,30 @@ const houseComponent = ()=> import('../views/House.vue')
 const wanderComponent = ()=> import('../views/Wander.vue')
 const earthComponent = ()=> import('../views/Earth.vue')
 const gameComponent = ()=> import('../views/Game.vue')
+const mluSceneComponent = ()=> import('../views/MluScene.vue')
 
 
 const routes = [
     {
         path: '/',
-        name: '游戏',
-        component: gameComponent
+        redirect: '/webpage'
     },
+    
+    {
+        path: '/webpage',
+        name: '网页',
+        component: webpageComponent
+    },
+    {
+        path: '/mluScene',
+        name: '多场景',
+        component: mluSceneComponent
+    },
+    // {
+    //     path: '/game',
+    //     name: '游戏',
+    //     component: gameComponent
+    // },
     {
         // 虚拟运动
         path: '/wander',
@@ -42,36 +60,36 @@ const routes = [
         name: '3D看房',
         component: houseComponent
     },
-    {
-        path: '/shader',
-        name: 'shader',
-        component: shaderComponent
-    },
+    // {
+    //     path: '/shader',
+    //     name: 'shader',
+    //     component: shaderComponent
+    // },
     // {
     //     path: '/point',
     //     name: 'point',
     //     component: pointComponent
     // },
-    {
-        path: '/pass',
-        name: 'pass',
-        component: passComponent
-    },
-    {
-        path: '/snow',
-        name: 'snow',
-        component: snowComponent
-    },
+    // {
+    //     path: '/pass',
+    //     name: 'pass',
+    //     component: passComponent
+    // },
+    // {
+    //     path: '/snow',
+    //     name: 'snow',
+    //     component: snowComponent
+    // },
     {
         path: '/light',
         name: '孔明灯',
         component: lightComponent
     },
-    {
-        path: '/firework',
-        name: '烟花',
-        component: fireworkComponent
-    },
+    // {
+    //     path: '/firework',
+    //     name: '烟花',
+    //     component: fireworkComponent
+    // },
     {
         path: '/cannon',
         name: '物理引擎',
@@ -108,16 +126,12 @@ const routes = [
         name: '射线',
         component: raycasterComponent
     },
-    {
-        path: '/people',
-        name: '人物变形',
-        component: peopleComponent
-    },
-    {
-        path: '/webpage',
-        name: 'webpage',
-        component: webpageComponent
-    },
+    // {
+    //     path: '/people',
+    //     name: '人物变形',
+    //     component: peopleComponent
+    // },
+    
     
     
 ]

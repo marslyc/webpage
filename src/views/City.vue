@@ -8,7 +8,7 @@
 <script setup>
 import Scene from '@/components/Scene.vue'
 import BigScreen from '@/components/BigScreen.vue';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, onBeforeUnmount, ref } from 'vue';
 
 // import { getSmartCityInfo, getSmartCityList } from '@/api/api.js'
 
@@ -89,13 +89,18 @@ const changeList = async () => {
     //     }
     // ]
 }
+let timer = null
 onMounted(() => {
     changeInfo()
     changeList()
-    setInterval(()=> {
+    timer = setInterval(()=> {
         changeInfo()
         changeList()
     }, 50000)
+})
+onBeforeUnmount(()=> {
+    clearInterval(timer)
+    timer = null
 })
 
 </script>

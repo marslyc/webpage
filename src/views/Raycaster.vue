@@ -11,7 +11,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 // 导入动画库
 import gsap from "gsap";
 
-import { ref ,onMounted } from 'vue'
+import { ref ,onMounted, onBeforeUnmount } from 'vue'
 
 let raycasterScene = ref()
 // 目标：认识pointes
@@ -24,7 +24,7 @@ const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
   0.1,
-  300
+  100
 );
 
 // 设置相机位置
@@ -65,9 +65,6 @@ renderer.shadowMap.enabled = true;
 renderer.physicallyCorrectLights = true;
 
 
-onMounted(()=> {
-  raycasterScene.value.appendChild(renderer.domElement);
-})
 
 // // 使用渲染器，通过相机将场景渲染进来
 // renderer.render(scene, camera);
@@ -112,7 +109,8 @@ let leftMenuWIdth = document.querySelector('.left-menu').offsetWidth
 // 投射光线
 let raycaster = new THREE.Raycaster()
 let mouse = new THREE.Vector2()
-window.addEventListener('click',(event)=> {
+
+let clickHandler = (event)=> {
   mouse.x = ((event.clientX- leftMenuWIdth) / window.innerWidth) * 2 - 1
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
   raycaster.setFromCamera(mouse, camera)
@@ -124,11 +122,9 @@ window.addEventListener('click',(event)=> {
   // result.forEach(item=> {
   //   item.object.material = redMaterial
   // })
-})
-
-// 监听画面变化，更新渲染画面
-window.addEventListener("resize", () => {
-
+}
+window.addEventListener('click', clickHandler)
+let resize = () => {
   // 更新摄像头
   camera.aspect = window.innerWidth / window.innerHeight;
   //   更新摄像机的投影矩阵
@@ -138,8 +134,17 @@ window.addEventListener("resize", () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   //   设置渲染器的像素比
   renderer.setPixelRatio(window.devicePixelRatio);
-});
+}
+// 监听画面变化，更新渲染画面
+window.addEventListener("resize", resize);
 
+onMounted(()=> {
+  raycasterScene.value.appendChild(renderer.domElement);
+})
+onBeforeUnmount(()=> {
+  window.removeEventListener("resize", resize);
+  window.removeEventListener("click", clickHandler);
+})
 
 </script>
 

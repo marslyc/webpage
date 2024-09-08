@@ -22,7 +22,7 @@ const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
   0.1,
-  3000
+  1000
 );
 
 // 设置相机位置
@@ -61,14 +61,14 @@ let textureLoader = new THREE.TextureLoader()
 
 // 精灵图
 let spriteMaterial;
-let spriteSrc1 = new URL('@/images/textures/city/alarm.png', import.meta.url).href
+let spriteSrc1 = new URL('@/images/house/enter.png', import.meta.url).href
 let texture = textureLoader.load(spriteSrc1)
 let spriteMaterial1 = new THREE.SpriteMaterial({
   map:texture
 })
 
 
-let spriteSrc2 = new URL('@/images/textures/city/alarm.png', import.meta.url).href
+let spriteSrc2 = new URL('@/images/house/enter.png', import.meta.url).href
 let stexture2 = textureLoader.load(spriteSrc2)
 let spriteMaterial2 = new THREE.SpriteMaterial({
   map:stexture2,
@@ -79,7 +79,7 @@ let spriteMaterial2 = new THREE.SpriteMaterial({
 spriteMaterial = spriteMaterial1
 
 let sprite = new THREE.Sprite(spriteMaterial)
-sprite.position.set(2, 0, 20)
+sprite.position.set(15, 1, 20)
 sprite.scale.set(2,2,2)
 
 scene.add(sprite)
@@ -123,10 +123,10 @@ mapsb.forEach((item,i)=> {
 materials = materials1
 
 let box = new THREE.Mesh(
-  new THREE.BoxGeometry(40, 40, 40),
+  new THREE.BoxGeometry(60, 60, 60),
   materials
 )
-box.geometry.scale(5,5,-5)
+box.geometry.scale(1,1,-1)
 scene.add(box)
 
 // 左侧菜单宽度
@@ -149,12 +149,12 @@ window.addEventListener('click', (event)=> {
     if(roomtype == 'room') {
       box.material = materials2
       sprite.material = spriteMaterial2
-      sprite.position.set(-30, 0, 0)
+      sprite.position.set(-25, 1, 2)
       roomtype = 'bedroom'
     } else if(roomtype == 'bedroom') {
       box.material = materials1
       sprite.material = spriteMaterial1
-      sprite.position.set(2, 0, 20)
+      sprite.position.set(15, 1, 20)
       roomtype = 'room'
     }
     
@@ -201,8 +201,8 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
 // 添加坐标轴辅助器
-const axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
+// const axesHelper = new THREE.AxesHelper(5);
+// scene.add(axesHelper);
 // 设置时钟
 const clock = new THREE.Clock();
 

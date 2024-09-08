@@ -12,7 +12,7 @@
   import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js"; 
   
 
-  let earthScene = ref()
+  let earthScene = ref(null)
   let scene,camera,renderer,labelRenderer;
   
   let clock = new THREE.Clock()
@@ -48,7 +48,7 @@
     const dirLight = new THREE.DirectionalLight(0xffffff);
     dirLight.position.set(0, 0, 1);
     scene.add(dirLight);
-    const light = new THREE.AmbientLight(0xffffff, 0.5); // soft white light
+    const light = new THREE.AmbientLight(0xffffff, 1); // soft white light
     scene.add(light);
   
     // const axesHelper = new THREE.AxesHelper( 5 );
@@ -89,10 +89,10 @@
     // 根据点创建曲线
     curve = new THREE.CatmullRomCurve3(
       [
-        new THREE.Vector3(-5, 0, 5),
-        new THREE.Vector3(-5, 5, 5),
+        new THREE.Vector3(-3, 2, -3),
+        new THREE.Vector3(-3, 3, -3),
         new THREE.Vector3(0, 0, 5),
-        new THREE.Vector3(5, -5, 5),
+        new THREE.Vector3(3, -5, 3),
         new THREE.Vector3(5, 0, 5),
       ],
       true

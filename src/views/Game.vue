@@ -5,19 +5,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import * as THREE from 'three';
 
-import Stats from 'three/addons/libs/stats.module.js';
-
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 import { Octree } from 'three/addons/math/Octree.js';
 import { OctreeHelper } from 'three/addons/helpers/OctreeHelper.js';
 
 import { Capsule } from 'three/addons/math/Capsule.js';
 
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 
 const clock = new THREE.Clock();
 
@@ -58,9 +56,7 @@ renderer.shadowMap.type = THREE.VSMShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
 
-const stats = new Stats();
-stats.domElement.style.position = 'absolute';
-stats.domElement.style.top = '0px';
+
 
 
 const GRAVITY = 30;
@@ -95,6 +91,7 @@ for ( let i = 0; i < NUM_SPHERES; i ++ ) {
 const worldOctree = new Octree();
 
 const playerCollider = new Capsule( new THREE.Vector3( 0, 0.35, 0 ), new THREE.Vector3( 0, 1, 0 ), 0.35 );
+scene.add(playerCollider)
 
 const playerVelocity = new THREE.Vector3();
 const playerDirection = new THREE.Vector3();
@@ -108,52 +105,54 @@ const vector1 = new THREE.Vector3();
 const vector2 = new THREE.Vector3();
 const vector3 = new THREE.Vector3();
 
-
+let keydownHandler = (event)=> {
+  keyStates[ event.code ] = true;
+}
+let keyupHandler = (event)=> {
+  keyStates[ event.code ] = false;
+}
+let mousedownHandler = (event)=> {
+  document.body.requestPointerLock();
+  mouseTime = performance.now();
+}
+let mouseupHandler = (event)=> {
+  if ( document.pointerLockElement !== null ) throwBall();
+}
+let mousemoveHandler = (event)=> {
+  if ( document.pointerLockElement === document.body ) {
+    camera.rotation.y -= event.movementX / 500;
+    camera.rotation.x -= event.movementY / 500;
+  }
+}
 onMounted(() => {
   gameScene.value.appendChild( renderer.domElement );
-  gameScene.value.appendChild( stats.domElement );
 
-  document.addEventListener( 'keydown', ( event ) => {
+  document.addEventListener( 'keydown', keydownHandler );
 
-keyStates[ event.code ] = true;
+  document.addEventListener( 'keyup', keyupHandler);
 
-} );
+  gameScene.value.addEventListener( 'mousedown', mousedownHandler );
 
-document.addEventListener( 'keyup', ( event ) => {
+  document.addEventListener( 'mouseup', mouseupHandler );
 
-keyStates[ event.code ] = false;
+  document.body.addEventListener( 'mousemove',mousemoveHandler );
 
-} );
-
-gameScene.value.addEventListener( 'mousedown', () => {
-
-document.body.requestPointerLock();
-
-mouseTime = performance.now();
-
-} );
-
-document.addEventListener( 'mouseup', () => {
-
-if ( document.pointerLockElement !== null ) throwBall();
-
-} );
-
-document.body.addEventListener( 'mousemove', ( event ) => {
-
-if ( document.pointerLockElement === document.body ) {
-
-  camera.rotation.y -= event.movementX / 500;
-  camera.rotation.x -= event.movementY / 500;
-
-}
-
-} );
-
-window.addEventListener( 'resize', onWindowResize );
+  window.addEventListener( 'resize', onWindowResize );
 
 })
+onUnmounted(()=> {
+  document.removeEventListener( 'keydown', keydownHandler );
 
+  document.removeEventListener( 'keyup', keyupHandler);
+
+  // gameScene.value.removeEventListener( 'mousedown', mousedownHandler );
+
+  document.removeEventListener( 'mouseup', mouseupHandler );
+
+  document.body.removeEventListener( 'mousemove',mousemoveHandler );
+
+  window.removeEventListener( 'resize', onWindowResize );
+})
 
 
 function onWindowResize() {
@@ -430,13 +429,13 @@ loader.load( gSrc, ( gltf ) => {
   helper.visible = false;
   scene.add( helper );
 
-  const gui = new GUI( { width: 200 } );
-  gui.add( { debug: false }, 'debug' )
-    .onChange( function ( value ) {
+  // const gui = new GUI( { width: 200 } );
+  // gui.add( { debug: false }, 'debug' )
+  //   .onChange( function ( value ) {
 
-      helper.visible = value;
+  //     helper.visible = value;
 
-    } );
+  //   } );
 
 } );
 
@@ -475,7 +474,6 @@ function animate() {
   }
   renderer.render( scene, camera );
 
-  stats.update();
 }
 
 </script>

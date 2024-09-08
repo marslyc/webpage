@@ -1,22 +1,22 @@
 
 
 <template>
-    <div id='box1' ref="pageScene">
+    <div id='box1' ref="pageScene" class="pageScene">
+      
       <div class="page page0">
-        <h1>Ray投射光线</h1>
+        <h1>魔方与投射光线</h1>
         <h3>THREE.Raycaster实现3d交互效果</h3>
       </div>
       <div class="page page1">
-        <h1>THREE.BufferGeometry！</h1>
+        <h1>酷炫三角形</h1>
         <h3>应用打造酷炫的三角形</h3>
       </div>
       <div class="page page2">
-        <h1>活泼点光源</h1>
+        <h1>点光源</h1>
         <h3>点光源围绕照亮小球</h3>
       </div>
+      <!-- <div ref="pageScene" class="pageScene"></div> -->
     </div>
-    <!-- <button @click="fullScreen">全屏</button> -->
-    <!-- <button @click="exitfullScreen">退出全屏</button> -->
   </template>
   
   <script setup>
@@ -25,9 +25,9 @@
   import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
   // 导入动画库
   import gsap from "gsap";
-  import { ref ,onMounted} from "vue";
+  import { ref ,onMounted, onUnmounted} from "vue";
 
-  let pageScene = ref()
+  let pageScene = ref(null)
   
   // 1、创建场景
   const scene = new THREE.Scene();
@@ -37,7 +37,7 @@
     75,
     window.innerWidth / window.innerHeight,
     0.1,
-    3000
+    300
   );
   
   // 设置相机位置
@@ -66,7 +66,7 @@
       }
     }
   }
-  cubeGroup.position.set(0,0,-5)
+  cubeGroup.position.set(0,-4,0)
   scene.add(cubeGroup)
   
   let sjxGroup = new THREE.Group()
@@ -88,7 +88,7 @@
       let mlcube = new THREE.Mesh(mlgeometry,mlmaterial)
       sjxGroup.add(mlcube)
   }
-  sjxGroup.position.set(0, -30, 0);
+  sjxGroup.position.set(0, -34, 0);
   scene.add(sjxGroup)
   
   
@@ -136,12 +136,12 @@
     new THREE.MeshBasicMaterial({ color: 0xff0000 })
   )
   smallBall.position.set(2, 2, 2);
-  // 设置透视相机的属性
+ 
   smallBall.add(pointLight);
   smallBallGroup.add(smallBall)
   
   
-  smallBallGroup.position.set(0, -60, 0);
+  smallBallGroup.position.set(0, -64, 0);
   scene.add(smallBallGroup);
   
   let arrGroup = [cubeGroup, sjxGroup, smallBallGroup];
@@ -155,9 +155,7 @@
   renderer.shadowMap.enabled = true;
   renderer.physicallyCorrectLights = true;
   
-  onMounted(()=> {
-    pageScene.value.appendChild(renderer.domElement);
-  })
+  
   
   // // 使用渲染器，通过相机将场景渲染进来
   // renderer.render(scene, camera);
@@ -212,26 +210,28 @@
   // 投射光线
   let raycaster = new THREE.Raycaster()
   let mouse = new THREE.Vector2()
-  // window.addEventListener('click',(event)=> {
-  //   // console.log(event,'eeee')
-  //   mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-  //   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
-  //   console.log(event,mouse);
-  //   raycaster.setFromCamera(mouse, camera)
-  //   let result = raycaster.intersectObjects(cubeArr)
-  //   console.log(result);
-  //   result[0].object.material = redMaterial
-  //   // result.forEach(item=> {
-  //   //   item.object.material = redMaterial
-  //   // })
-  // })
-  window.addEventListener('mousemove',(event)=> {
-    // console.log(event,'eeee')
+  let clickHandler = (event) => {
+    mouse.x = ((event.clientX - 180) / window.innerWidth) * 2 - 1
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+    raycaster.setFromCamera(mouse, camera)
+    let result = raycaster.intersectObjects(cubeArr)
+
+    if(result[0]) {
+      result[0].object.material = redMaterial
+    }
+    // result.forEach(item=> {
+    //   item.object.material = redMaterial
+    // })
+  }
+  window.addEventListener('click',clickHandler)
+  let mousemoveHandler = (event) => {
     mouse.x = (event.clientX / window.innerWidth) - 0.5
     mouse.y = -(event.clientY / window.innerHeight) - 0.5
   
-  })
-  
+  }
+  window.addEventListener('mousemove', mousemoveHandler)
+  let scrollY = 0
   function render() {
     // let time = clock.getElapsedTime();
     let deltaTime = clock.getDelta();
@@ -244,22 +244,65 @@
     // smallBallGroup.rotation.z = Math.sin(time) * 0.05;
     // smallBallGroup.rotation.x = Math.sin(time) * 0.05;
   
-    camera.position.y = -(window.scrollY / window.innerHeight) *30
+    camera.position.y = -(scrollY / window.innerHeight) *30
     camera.position.x += (mouse.x * 10 - camera.position.x) * deltaTime * 5;
-    
+
     // controls.update();
     renderer.render(scene, camera);
     //   渲染下一帧的时候就会调用render函数
     requestAnimationFrame(render);
   }
+  // 设置当前页
+  let currentPage = 0
+  let scrollHandler = (event) => {
+    let domEL = document.querySelector('.right-content')
+
+    scrollY = - document.querySelector('.page0').getBoundingClientRect().top
+      let newPage = Math.round(scrollY / window.innerHeight)
+      if(newPage !== currentPage) {
+        currentPage = newPage
+
+        gsap.to(arrGroup[currentPage].rotation, {
+          z: "+=" + Math.PI * 2,
+          duration: 1,
+          ease: "power1.inOut"
+        })
+    
+        // gsap.to(`.page${currentPage} h1`, {
+        //   rotate: "+=360",
+        //   duration: 1,
+        // });
+        gsap.fromTo(
+          `.page${currentPage} h1`,
+          { x: -300 },
+          { x: 0, rotate: "+=360", duration: 1 }
+        );
+      }
+  }
+  onMounted(()=> {
+    pageScene.value.appendChild(renderer.domElement);
+    render();
+
+    
+    // 监听滚动
+    
+    let domEL = document.querySelector('.right-content')
+
+    domEL.addEventListener('scroll',scrollHandler)
+    // window.addEventListener('scroll',scrollHandler)
   
-  render();
-  
-  
-  
-  // 监听画面变化，更新渲染画面
-  window.addEventListener("resize", () => {
-    //   console.log("画面变化了");
+  })
+  onUnmounted(()=> {
+
+    let domEL = document.querySelector('.right-content')
+    domEL.removeEventListener('scroll',scrollHandler)
+
+    window.removeEventListener('click',clickHandler)
+    window.removeEventListener('mousemove', mousemoveHandler)
+    window.removeEventListener("resize", resizeHandler);
+  })
+  let resizeHandler = () => {
+
     // 更新摄像头
     camera.aspect = window.innerWidth / window.innerHeight;
     //   更新摄像机的投影矩阵
@@ -269,73 +312,58 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     //   设置渲染器的像素比
     renderer.setPixelRatio(window.devicePixelRatio);
-  });
-  
-  // 设置当前页
-  let currentPage = 0
-  // 监听滚动
-  window.addEventListener('scroll',()=> {
-    let newPage = Math.round(window.scrollY / window.innerHeight)
-    if(newPage !== currentPage) {
-      currentPage = newPage
-
-      gsap.to(arrGroup[currentPage].rotation, {
-        z: "+=" + Math.PI * 2,
-        duration: 1,
-        ease: "power1.inOut"
-      })
-  
-      // gsap.to(`.page${currentPage} h1`, {
-      //   rotate: "+=360",
-      //   duration: 1,
-      // });
-      gsap.fromTo(
-        `.page${currentPage} h1`,
-        { x: -300 },
-        { x: 0, rotate: "+=360", duration: 1 }
-      );
-    }
-  })
+  }
+  // 监听画面变化，更新渲染画面
+  window.addEventListener("resize", resizeHandler);
+ 
   
   
   </script>
   
-  <style scoped>
-  * {
-    margin: 0;
-    padding: 0;
-  }
-  #box1 {
-    background-color: rgb(36, 58, 66);
-    overflow: auto;
-    position: relative;
-  }
-  canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  .page {
-    height: 100vh;
-    display: flex;
-    color: #fff;
-    flex-direction: column;
-    /* justify-content: center; */
-    align-items: center;
-    position: relative;
-    z-index: 10;
-  }
-  .page h1 {
-    margin: 60px;
-    font-size: 40px;
-  }
-  
-  .page h3 {
-    font-size: 30px;
-  }
-  ::-webkit-scrollbar {
-    display: none;
-  }
+  <style >
+ * {
+  margin: 0;
+  padding: 0;
+}
+#box1 {
+  background-color: rgb(36, 58, 66) !important;
+  overflow: auto;
+  position: relative;
+}
+/* .pageScene {
+  overflow: auto;
+  position: absolute;
+  height: 300vh;
+  top: 0;
+  left: 0;
+} */
+canvas {
+  position: fixed;
+  left: 180px;
+  top: 0;
+}
+.page {
+  height: 100vh;
+  display: flex;
+  color: #fff;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+.page h1 {
+  margin: 60px;
+  font-size: 40px;
+}
+
+.page h3 {
+  font-size: 30px;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+
   
   </style>
   

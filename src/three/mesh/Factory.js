@@ -36,6 +36,7 @@ class createFactory {
                     // child.castShadow = true;
                 }
                 if(array.indexOf(child.name) != -1) {
+                    // console.log(child.position)
                     let css3dObject = this.createTag(child)
                     this.floor2Tags.push(css3dObject);
                     this.floor2Group.add(css3dObject)
@@ -101,6 +102,11 @@ class createFactory {
         `;
 
         const objectCSS3D = new CSS3DObject(element);
+        object3d.position
+        // let positions = object3d.position.clone()
+        
+        // positions.set(positions.x + 50, positions.y , positions.z);
+        // console.log(positions,'pppp')
         objectCSS3D.position.copy(object3d.position);
         objectCSS3D.scale.set(0.2, 0.2, 0.2);
         return objectCSS3D;
@@ -145,13 +151,26 @@ class createFactory {
             })
         })
         eventHub.on('pointsFighter',()=> {
+  
+            
             this.createPoints(this.fighterGroup)
+            if(this.fighterPointsGroup) {
+                this.fighterPointsGroup.visible = true;
+            }
+            this.floor2Group.visible = false
+            this.fighterGroup.visible = false
         })
         eventHub.on("pointsBlast", () => {
             this.pointsBlast();
+            
         });
         eventHub.on("pointsBack", () => {
             this.pointsBack();
+        });
+        eventHub.on("pointsRemove", () => {
+            this.fighterPointsGroup.visible = false;
+            this.floor2Group.visible = true
+            this.fighterGroup.visible = true
         });
     }
     createPoints(object3d) {
