@@ -20,7 +20,7 @@ let camera = new THREE.PerspectiveCamera(
     90,
     window.innerWidth / window. innerHeight,
     0.1,
-    100000
+    1000
 )
 camera.position.set(0,0,100)
 // 更新摄像头
@@ -230,7 +230,8 @@ let createFlyline = (lineData) => {
         let point2 = new THREE.Vector3( x2, -y2, 5)
 
         // 中间点
-        let minPoint = new THREE.Vector3((x1 + x2)/2, (-y1 + -x2)/2, 15)
+        let minMad = Math.random() * 24 - 10
+        let minPoint = new THREE.Vector3((x1 + x2)/2, (-y1 - x2 - minMad)/2, 15)
 
         // 贝塞尔曲线
         let curve = new THREE.QuadraticBezierCurve3(point1,minPoint,point2)
@@ -304,7 +305,7 @@ let lineAnimation = () => {
     let now = new Date().getTime()
 
     
-    if(now - timeStamp > 100) {
+    if(now - timeStamp > 80) {
 
         geoArr.forEach((item,ind) => {
 

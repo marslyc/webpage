@@ -30,6 +30,7 @@ import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 import gsap from 'gsap';
 
+
 let canvasScene = ref(null)
 let colorScene = ref(null)
 let carScene = ref(null)
@@ -37,6 +38,13 @@ let sphereScene = ref(null)
 let b1Scene = ref(null)
 let b2Scene = ref(null)
 let b3Scene = ref(null)
+
+let maxY = 0
+let resize = () => {
+    let boxx = document.querySelector('.boxx')
+    maxY = boxx.scrollHeight - boxx.clientHeight
+    // console.log(boxx.clientHeight,boxx.scrollHeight,'sssrrrr')
+}
 
 
 onMounted(() => {
@@ -379,12 +387,12 @@ setupScene5()
 
 // 获取滚动条所在元素
 let boxx = document.querySelector('.boxx')
-let maxY = boxx.scrollHeight - boxx.clientHeight
-let resize = () => {
-    let boxx = document.querySelector('.boxx')
-    maxY = boxx.scrollHeight - boxx.clientHeight
-    // console.log(boxx.clientHeight,boxx.scrollHeight,'sssrrrr')
-}
+maxY = boxx.scrollHeight - boxx.clientHeight
+// let resize = () => {
+//     let boxx = document.querySelector('.boxx')
+//     maxY = boxx.scrollHeight - boxx.clientHeight
+//     // console.log(boxx.clientHeight,boxx.scrollHeight,'sssrrrr')
+// }
 window.addEventListener("resize", resize);
 
 let scrollY = 0
@@ -509,9 +517,10 @@ animate()
     // carScene.value.appendChild(renderer.domElement)
     // sphereScene.value.appendChild(renderer.domElement)
 })
-// onBeforeUnmount(()=> {
-//   window.removeEventListener("resize", resize);
-// })
+onBeforeUnmount(()=> {
+  window.removeEventListener("resize", resize);
+//   window.addEventListener("resize", resize);
+})
 
 </script>
 <style scoped>

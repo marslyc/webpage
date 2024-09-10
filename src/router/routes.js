@@ -21,6 +21,8 @@ const wanderComponent = ()=> import('../views/Wander.vue')
 const earthComponent = ()=> import('../views/Earth.vue')
 const gameComponent = ()=> import('../views/Game.vue')
 const mluSceneComponent = ()=> import('../views/MluScene.vue')
+const carComponent = ()=> import('../views/Car.vue')
+
 
 
 const routes = [
@@ -120,6 +122,11 @@ const routes = [
         path: '/map',
         name: '3D地图',
         component: mapComponent
+    },
+    {
+        path: '/car',
+        name: '汽车展示',
+        component: carComponent
     },
     {
         path: '/raycaster',

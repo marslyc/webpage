@@ -12,6 +12,13 @@ import gsap from 'gsap';
 
 import * as CANNON from 'cannon-es'
 import CannonDebug from 'cannon-es-debugger'
+
+// 左侧菜单宽度
+let leftMenuWIdth = document.querySelector('.left-menu').offsetWidth || 180 
+
+let cWidth =  window.innerWidth - leftMenuWIdth
+let cHeight = window.innerHeight
+
 // 目标：认识pointes
 let cannonScene = ref(null)
 // 1、创建场景
@@ -20,7 +27,7 @@ const scene = new THREE.Scene();
 // 2、创建相机
 const camera = new THREE.PerspectiveCamera(
   75,
-  window.innerWidth / window.innerHeight,
+  cWidth / cHeight,
   0.1,
   300
 );
@@ -200,7 +207,7 @@ const renderer = new THREE.WebGLRenderer({
   alpha: true,
 });
 // 设置渲染的尺寸大小{}
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(cWidth, cHeight);
 renderer.shadowMap.enabled = true
 
 
@@ -245,13 +252,15 @@ render();
 
 
 let resize = () => {
+  cWidth = window.innerWidth - leftMenuWIdth
+  cHeight = window.innerHeight
   // 更新摄像头
-  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = cWidth / cHeight;
   //   更新摄像机的投影矩阵
   camera.updateProjectionMatrix();
 
   //   更新渲染器
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(cWidth, cHeight);
   //   设置渲染器的像素比
   renderer.setPixelRatio(window.devicePixelRatio);
 }

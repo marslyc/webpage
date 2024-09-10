@@ -10,20 +10,24 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-
-  
 import gsap from 'gsap';
+
+// 左侧菜单宽度
+let leftMenuWIdth = document.querySelector('.left-menu').offsetWidth || 180 
+
+let cWidth =  window.innerWidth - leftMenuWIdth
+let cHeight = window.innerHeight
 
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(
     90,
-    window.innerWidth / window. innerHeight,
+    cWidth / cHeight,
     0.1,
     100000
 )
 camera.position.set(0,2,2)
 // 更新摄像头
-camera.aspect = window.innerWidth / window.innerHeight
+camera.aspect = cWidth / cHeight
 //   更新摄像机的投影矩阵
 camera.updateProjectionMatrix()
 scene.add(camera)
@@ -149,17 +153,19 @@ gltfLoader.load(gSrc,(gltf)=> {
 
 
 let renderer = new THREE.WebGLRenderer()
-renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.setSize(cWidth, cHeight)
 // 开启场景中的阴影贴图
 renderer.shadowMap.enabled = true;
 renderer.physicallyCorrectLights = true;
 renderer.setClearColor(0xcccccc, 1);
-
+leftMenuWIdth = document.querySelector('.left-menu').offsetWidth || 180 
 let resize = () => {
-    camera.aspect = window.innerWidth / window.innerHeight
+    cWidth = window.innerWidth - leftMenuWIdth
+    cHeight = window.innerHeight
+    camera.aspect = cWidth / cHeight
     camera.updateProjectionMatrix()
 
-    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setSize(cWidth, cHeight)
     renderer.setPixelRatio(window.devicePixelRatio)
 }
 window.addEventListener('resize', resize)

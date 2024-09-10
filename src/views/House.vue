@@ -9,9 +9,15 @@ import * as THREE from "three";
 // 导入轨道控制器
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
-import { onMounted, ref } from "vue"; 
+import { onMounted, ref, onUnmounted } from "vue"; 
 // 导入动画库
 import gsap from "gsap";
+
+// 左侧菜单宽度
+let leftMenuWIdth = document.querySelector('.left-menu').offsetWidth || 180 
+
+let cWidth =  window.innerWidth - leftMenuWIdth
+let cHeight = window.innerHeight
 
 let house = ref()
 // 1、创建场景
@@ -20,7 +26,7 @@ const scene = new THREE.Scene();
 // 2、创建相机
 const camera = new THREE.PerspectiveCamera(
   75,
-  window.innerWidth / window.innerHeight,
+  cWidth / cHeight,
   0.1,
   1000
 );
@@ -130,17 +136,18 @@ box.geometry.scale(1,1,-1)
 scene.add(box)
 
 // 左侧菜单宽度
-let leftMenuWIdth = document.querySelector('.left-menu').offsetWidth
+// let leftMenuWIdth = document.querySelector('.left-menu').offsetWidth
 
 
 let roomtype = 'room'
 let raycaster = new THREE.Raycaster()
 let mouse = new THREE.Vector2()
-window.addEventListener('click', (event)=> {
+
+let clickHandler = (event)=> {
   // mouse.x = (event.clientX / window.innerWidth) * 2 - 1
   // 当有左侧菜单时
-  mouse.x = ((event.clientX - leftMenuWIdth) / window.innerWidth) * 2 - 1
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+  mouse.x = ((event.clientX - leftMenuWIdth) / cWidth) * 2 - 1
+  mouse.y = -(event.clientY / cHeight) * 2 + 1
 
   raycaster.setFromCamera(mouse, camera)
   let intersects = raycaster.intersectObject(sprite)
@@ -159,7 +166,8 @@ window.addEventListener('click', (event)=> {
     }
     
   }
-})
+}
+window.addEventListener('click', clickHandler )
 
 
 // let rSrc = new URL('@/images/house/Living.hdr', import.meta.url).href
@@ -182,7 +190,7 @@ window.addEventListener('click', (event)=> {
 // 初始化渲染器
 const renderer = new THREE.WebGLRenderer();
 // 设置渲染的尺寸大小
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(cWidth, cHeight);
 // 开启场景中的阴影贴图
 renderer.shadowMap.enabled = true;
 renderer.physicallyCorrectLights = true;
@@ -216,19 +224,27 @@ function render() {
 }
 
 render();
-
-// 监听画面变化，更新渲染画面
-window.addEventListener("resize", () => {
+leftMenuWIdth = document.querySelector('.left-menu').offsetWidth || 180 
+let resize = () => {
+  cWidth = window.innerWidth - leftMenuWIdth
+  cHeight = window.innerHeight
   // 更新摄像头
-  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = cWidth / cHeight;
   //   更新摄像机的投影矩阵
   camera.updateProjectionMatrix();
 
   //   更新渲染器
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(cWidth, cHeight);
   //   设置渲染器的像素比
   renderer.setPixelRatio(window.devicePixelRatio);
-});
+}
+
+// 监听画面变化，更新渲染画面
+window.addEventListener("resize", resize);
+onUnmounted(() => {
+  window.removeEventListener("resize", resize)
+  window.removeEventListener('click', clickHandler )
+})
 
 
 </script>

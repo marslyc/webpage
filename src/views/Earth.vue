@@ -10,7 +10,11 @@
   import { ref, onMounted, onUnmounted } from "vue";
   
   import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js"; 
-  
+  // 左侧菜单宽度
+  let leftMenuWIdth = document.querySelector('.left-menu').offsetWidth || 180 
+
+  let cWidth =  window.innerWidth - leftMenuWIdth
+  let cHeight = window.innerHeight
 
   let earthScene = ref(null)
   let scene,camera,renderer,labelRenderer;
@@ -37,7 +41,7 @@
   
     camera = new THREE.PerspectiveCamera(
       45,
-      window.innerWidth / window.innerHeight,
+      cWidth / cHeight,
       0.1,
       200
     );
@@ -133,7 +137,7 @@
   
     // 实例化css2d的渲染器
     labelRenderer = new CSS2DRenderer();
-    labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    labelRenderer.setSize(cWidth, cHeight);
     // document.body.appendChild(labelRenderer.domElement)
     labelRenderer.domElement.style.position = 'absolute';
     labelRenderer.domElement.style.top = '0px';
@@ -146,7 +150,7 @@
   
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(cWidth, cHeight);
 
     onMounted(()=> {
       // 先注释
@@ -159,19 +163,21 @@
     controls.minDistance = 5;
     controls.maxDistance = 100;
 
-  
+    leftMenuWIdth = document.querySelector('.left-menu').offsetWidth || 180 
     window.addEventListener("resize", onWindowResize);
     onUnmounted(()=> {
       window.removeEventListener("resize", onWindowResize);
     })
   }
   function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    cWidth = window.innerWidth - leftMenuWIdth
+    cHeight = window.innerHeight
+    camera.aspect = cWidth / cHeight;
   
     camera.updateProjectionMatrix();
   
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(cWidth, cHeight);
+    labelRenderer.setSize(cWidth, cHeight);
   }
   
   function animate() {

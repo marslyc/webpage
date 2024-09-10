@@ -1,7 +1,19 @@
 
 
 <template>
-  <div id='box1' ref="wanderScene"></div>
+  <div id='wanderScene' ref="wanderScene">
+    <div class="movetip">
+      <p>w -> 向前运动</p>
+      <p>s -> 向后运动</p>
+      <p>a -> 向左运动</p>
+      <p>d -> 向右运动</p>
+      <p>t -> 挥手</p>
+      <p>v -> 切换摄像头</p>
+      <p>j -> 跳舞</p>
+      <p>k -> 停止跳舞</p>
+      <p>空格 -> 跳起</p>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -18,7 +30,13 @@ import gsap from "gsap";
 import { ref ,onMounted, onUnmounted, onBeforeUnmount  } from 'vue'
 import { Capsule } from "three/examples/jsm/Addons.js";
 
-let wanderScene = ref()
+// 左侧菜单宽度
+let leftMenuWIdth = document.querySelector('.left-menu').offsetWidth || 180 
+
+let cWidth =  window.innerWidth - leftMenuWIdth
+let cHeight = window.innerHeight
+
+let wanderScene = ref(null)
 
 // 1、创建场景
 const scene = new THREE.Scene();
@@ -26,7 +44,7 @@ const scene = new THREE.Scene();
 // 2、创建相机
 const camera = new THREE.PerspectiveCamera(
   75,
-  window.innerWidth / window.innerHeight,
+  cWidth / cHeight,
   0.1,
   1000
 );
@@ -37,7 +55,7 @@ camera.position.set(0, 5, 10);
 // 创建后置相机
 const backCamera = new THREE.PerspectiveCamera(
   75,
-  window.innerWidth / window.innerHeight,
+  cWidth / cHeight,
   0.1,
   1000
 );
@@ -48,7 +66,7 @@ backCamera.position.set(0, 5, -10);
 // 初始化渲染器
 const renderer = new THREE.WebGLRenderer();
 // 设置渲染的尺寸大小
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(cWidth, cHeight);
 // 开启场景中的阴影贴图
 renderer.shadowMap.enabled = true;
 
@@ -603,16 +621,17 @@ let resetPlayer = () => {
 const clock = new THREE.Clock();
 
 
-
+leftMenuWIdth = document.querySelector('.left-menu').offsetWidth || 180 
 let upDateSize = () => {
-   //   console.log("画面变化了");
+  cWidth = window.innerWidth - leftMenuWIdth
+  cHeight = window.innerHeight
   // 更新摄像头
-  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = cWidth / cHeight;
   //   更新摄像机的投影矩阵
   camera.updateProjectionMatrix();
 
   //   更新渲染器
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(cWidth, cHeight);
   //   设置渲染器的像素比
   renderer.setPixelRatio(window.devicePixelRatio);
 }
@@ -678,4 +697,17 @@ render();
   margin: 0;
   padding: 0;
 }
+#wanderScene {
+  position: relative;
+}
+.movetip {
+  border: 1px solid #ccc;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 10px;
+  background: #eee;
+  opacity: 0.4;
+}
+
 </style>
