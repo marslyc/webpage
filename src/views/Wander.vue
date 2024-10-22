@@ -73,9 +73,9 @@ renderer.shadowMap.enabled = true;
 renderer.physicallyCorrectLights = true;
 
 
-// 添加坐标轴辅助器
-const axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
+// // 添加坐标轴辅助器
+// const axesHelper = new THREE.AxesHelper(5);
+// scene.add(axesHelper);
 
 let ambientLight  = new THREE.AmbientLight(0xffffff, 1)
 scene.add(ambientLight)
@@ -293,8 +293,8 @@ gltfLoader.load(gSrc,(gltf)=> {
 
   player = gltf.scene
   gltf.scene.scale.set(0.5,0.5,0.5)
-  gltf.scene.position.set(0,-0.95,0)
-  // scene.add(gltf.scene)
+  gltf.scene.position.set(0,-0.8,0)
+  // scene.add(gltf.scene)v
   capsule.add(gltf.scene)
   
   let animations = gltf.animations
@@ -390,11 +390,13 @@ let animateDuration = (name)=> {
 }
 
 let keydownHandler = (event)=> {
-
   let key = event.code.toLocaleLowerCase()
   if(key == 'space' && !isJumping) {
     isJumping = true
-    changeAnimation('Jump')
+    if(playerVelocity.y <= 0) {
+      changeAnimation('Jump')
+    }
+    
   }
   if(key == 'keyj' && !isDanceing) {
     isDanceing = true
@@ -432,9 +434,10 @@ let keyupHandler = (event)=> {
     
   }
 }
+let cavdata = 0.0015
 let mousemoveHandler = (event)=> {
-  capsule.rotation.y -= event.movementX * 0.003
-  capsuleBody.rotation.x += event.movementY * 0.003
+  capsule.rotation.y -= event.movementX * cavdata
+  capsuleBody.rotation.x += event.movementY * cavdata
   if(capsuleBody.rotation.x > Math.PI / 8) {
     capsuleBody.rotation.x = Math.PI / 8
   } else if(capsuleBody.rotation.x < -Math.PI / 8) {
@@ -481,7 +484,8 @@ let controlsPlayer = (delateTime)=> {
     // console.log(capsuleFront,'capsuleFront')
     playerVelocity.add(capsuleFront.multiplyScalar(delateTime))
     // console.log(playerVelocity,'playerVelocity')
-  } else if(keyPressObj['keys']) {
+  }
+  if(keyPressObj['keys']) {
     // lookAtDirection.set(
     //   player.position.x - cameraDirection.x,
     //   player.position.y,
@@ -500,7 +504,8 @@ let controlsPlayer = (delateTime)=> {
     capsule.getWorldDirection(capsuleFront)
     
     playerVelocity.add(capsuleFront.multiplyScalar(-delateTime))
-  } else if(keyPressObj['keya']) {
+  }
+  if(keyPressObj['keya']) {
     // let leftDirection = new THREE.Vector3(
     //   -cameraDirection.z,
     //   0,
@@ -521,7 +526,8 @@ let controlsPlayer = (delateTime)=> {
     // 侧面 求叉积， 则获得垂直方向
     capsuleFront.cross(capsule.up)
     playerVelocity.add(capsuleFront.multiplyScalar(-delateTime))
-  } else if(keyPressObj['keyd']) {
+  } 
+  if(keyPressObj['keyd']) {
     // let rightDirection = new THREE.Vector3(
     //   cameraDirection.z,
     //   0,
@@ -544,8 +550,8 @@ let controlsPlayer = (delateTime)=> {
     playerVelocity.add(capsuleFront.multiplyScalar(delateTime))
   } 
 
-  if(keyPressObj['space']) {
-    playerVelocity.y = 5
+  if(keyPressObj['space'] && playerVelocity.y == 0) {
+    playerVelocity.y = 8
   }
 
 

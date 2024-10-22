@@ -22,6 +22,8 @@ const earthComponent = ()=> import('../views/Earth.vue')
 const gameComponent = ()=> import('../views/Game.vue')
 const mluSceneComponent = ()=> import('../views/MluScene.vue')
 const carComponent = ()=> import('../views/Car.vue')
+// const blenderComponent = ()=> import('../views/Blender.vue')
+// const bleDetailComponent = ()=> import('../views/BlenderDetail.vue')
 
 
 
@@ -133,6 +135,19 @@ const routes = [
         name: '射线',
         component: raycasterComponent
     },
+    // {
+    //     path: '/blender',
+    //     name: 'blender建模',
+    //     component: blenderComponent,
+    // },
+    // {
+    //     path: '/blender/:id',
+    //     name: 'blender模型',
+    //     component: bleDetailComponent,
+    //     meta: {
+    //         hideMenu: true
+    //     }
+    // }
     // {
     //     path: '/people',
     //     name: '人物变形',

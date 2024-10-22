@@ -18,19 +18,20 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import LeftMenu from '@/views/LeftMenu.vue';
-// import Stats from 'three/examples/jsm/libs/stats.module.js';    
-// let stats = new Stats();
-// stats.domElement.style.position = 'absolute';
-// stats.domElement.style.top = '0px';
-// const animate = () => {
-//   stats.update();
-//   requestAnimationFrame(animate);
-// }
-// onMounted(() => {
-//   animate()
-// })
+import Stats from 'three/examples/jsm/libs/stats.module.js';    
+let stats = new Stats();
+stats.domElement.style.position = 'absolute';
+stats.domElement.style.bottom = '0px';
+stats.domElement.classList.add('statsstyle')
+const animate = () => {
+  stats.update();
+  requestAnimationFrame(animate);
+}
+onMounted(() => {
+  animate()
+})
 
-// document.body.appendChild(stats.dom);
+document.body.appendChild(stats.dom);
 </script>
 <style>
 
@@ -47,6 +48,13 @@ body{
 .app-container {
   display: flex;
   height: 100vh;
+}
+
+.statsstyle canvas {
+  position: fixed;
+  left: 0;
+  top: calc(100% - 48px);
+  bottom: 0 !important;
 }
 
 .right-content {

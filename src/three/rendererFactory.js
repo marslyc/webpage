@@ -1,6 +1,10 @@
 import * as THREE from "three";
 import { CSS3DRenderer } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 
+let leftMenuWidth = document.querySelector(".left-menu").offsetWidth || 180
+let cWidth = window.innerWidth - leftMenuWidth
+let cHeight = window.innerHeight
+
 let renderer = new THREE.WebGLRenderer({
     // 抗锯齿
     antialias: true,
@@ -18,7 +22,7 @@ let renderer = new THREE.WebGLRenderer({
 // renderer.shadowMap.enabled = true;
 // 给场景添加平行光
 // 设置渲染尺寸大小
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(cWidth, cHeight);
 renderer.shadowMap.enabled = true;
 // 调节色调映射
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -27,7 +31,7 @@ renderer.toneMappingExposure = 0.8;
 
 // 创建css3drender
 const css3drender = new CSS3DRenderer();
-css3drender.setSize(window.innerWidth, window.innerHeight);
+css3drender.setSize(cWidth, cHeight);
 // document.querySelector(".cssrender").appendChild(css3drender.domElement);
 
 export default { renderer, css3drender};

@@ -123,7 +123,8 @@ let glassMaterial = new THREE.MeshPhysicalMaterial({
     metalness: 0,
     roughness: 0,
     transmission: 1,
-    transparent: true
+    ior: 3
+    // transparent: true
 })
 
 let colors = ["red", "blue", "green", "black"

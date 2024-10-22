@@ -1,9 +1,12 @@
 
 import * as THREE from "three";
 import eventHub from "@/utils/eventHub";
+let leftMenuWidth = document.querySelector(".left-menu").offsetWidth || 180
+let cWidth = window.innerWidth - leftMenuWidth
+let cHeight = window.innerHeight
 let camera = new THREE.PerspectiveCamera(
     75,
-    window.innerWidth / window.innerHeight,
+    cWidth / cHeight,
     0.1,
     100000
   );

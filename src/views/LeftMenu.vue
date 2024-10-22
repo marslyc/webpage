@@ -2,17 +2,15 @@
     <div class="left-menu">
 
       <div v-for="item in routes">
-        <router-link :to="item.path">{{ item.name }}</router-link>
+
+        <router-link v-if="!(item.meta && item.meta.hideMenu)" :to="item.path">{{ item.name }}</router-link>
       </div>
       
     </div>
 </template>
 <script setup>
+
 import routes from '@/router/routes';
-
-// let routemap = routes.forEach(item=>{
-
-// });
 
 </script>
 <style scoped>
