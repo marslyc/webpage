@@ -31,7 +31,7 @@ onMounted(() => {
   animate()
 })
 
-  document.body.appendChild(stats.dom);
+document.body.appendChild(stats.dom);
 </script>
 <style>
 
@@ -54,7 +54,7 @@ body{
   position: fixed;
   left: 0;
   top: calc(100% - 48px);
-  bottom: 0 !important;
+  bottom: 0;
 }
 
 .right-content {

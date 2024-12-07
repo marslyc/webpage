@@ -50,7 +50,7 @@ export default class Park {
                     this.redcar = item;
                 }
             })
-
+console.log(gltf.cameras,'gltf.cameras')
             gltf.cameras.forEach((camera) => {
                 cameraModule.add(camera.name,camera)
             })
