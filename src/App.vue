@@ -31,7 +31,7 @@ onMounted(() => {
   animate()
 })
 
-document.body.appendChild(stats.dom);
+  document.body.appendChild(stats.dom);
 </script>
 <style>
 
